@@ -9,6 +9,10 @@ class EmployeePunchIn extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'employee_id',
+    ];
+
     public function employee()
     {
         return $this->belongTo(Employee::class);
