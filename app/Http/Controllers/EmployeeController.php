@@ -54,8 +54,8 @@ class EmployeeController extends Controller
                 $nestedData['punchin_date'] = $employee->punchinTime ? $employee->punchinTime->created_at->format('Y-m-d') : "";
                 $nestedData['punchin_time'] = $employee->punchinTime ? $employee->punchinTime->created_at->format('H:i:s') : "";
 
-                $nestedData['punchout_date'] = $employee->punchoutTime ? $employee->punchinTime->created_at->format('Y-m-d') : "";
-                $nestedData['punchout_time'] = $employee->punchoutTime ? $employee->punchinTime->created_at->format('H:i:s') : "";
+                $nestedData['punchout_date'] = $employee->punchoutTime ? $employee->punchoutTime->created_at->format('Y-m-d') : "";
+                $nestedData['punchout_time'] = $employee->punchoutTime ? $employee->punchoutTime->created_at->format('H:i:s') : "";
 
                 $action = '<div class="tb-icon-wrap">';
                 $action .= '<a href="'.route('employee.view',$employee->id).'" class="btn btn-info btn-xs action-btn" role="button" aria-pressed="true"><i class="fa fa-eye"></i></a>';
@@ -92,5 +92,15 @@ class EmployeeController extends Controller
 
         $retArr = ['success' => 1,'message' => "Punch In successfully!"];
         return response()->json($retArr);
+    }
+
+    public function view($id)
+    {
+        $employee = Employee::find($id);
+        if(!$employee) {
+            return redirect(route('employee.index'))->with(['alert-class' => 'error', 'message' => "Invalid Access!"]);
+        }
+        $title = "View Employee";
+        return view('employee.view',compact('title', 'employee'));
     }
 }

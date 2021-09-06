@@ -31,7 +31,7 @@ $(document).on('submit','#frmEmployee', function (e) {
             {
                 toastr.success(data.message);
                 $('#frmEmployee')[0].reset();
-                myTable();
+                myTable.ajax.reload();
             }
             else
             {
