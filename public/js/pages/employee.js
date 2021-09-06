@@ -1,4 +1,6 @@
+var myTable;
 $(document).ready(function(){
+    data_table();
     $('#frmEmployee').validate({
         errorElement: 'span',
         rules: {
@@ -29,6 +31,7 @@ $(document).on('submit','#frmEmployee', function (e) {
             {
                 toastr.success(data.message);
                 $('#frmEmployee')[0].reset();
+                myTable();
             }
             else
             {
@@ -42,3 +45,39 @@ $(document).on('submit','#frmEmployee', function (e) {
         }
     });
 })
+
+
+function data_table()
+{
+    $.fn.dataTable.ext.errMode = 'none';
+    myTable = $('#data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "employee/ajax"
+        },
+        "order": [],
+        "ordering": false,
+        // "searching": false,
+        // 'displayLength' : 1,
+        columns: [
+            {data: 'id', name: 'id', orderable: false},
+            {data: 'name', name: 'name', orderable: false},
+            {data: 'punchin_date', name: 'punchin_date', orderable: false},
+            {data: 'punchin_time', name: 'punchin_time', orderable: false},
+            {data: 'punchout_date', name: 'punchout_date', orderable: false},
+            {data: 'punchout_time', name: 'punchout_time', orderable: false},
+            {data: 'action', name: 'action', orderable: false},
+        ],
+        oLanguage: {
+            sSearch: "",
+            sSearchPlaceholder: "Search",
+            sEmptyTable: "No data found.",
+            sProcessing: '<div class="loader"><span class="loader-image"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span></div>'
+        }
+    });
+    $('.dataTables_filter input').addClass('form-control');
+    $('.dataTables_length select').addClass('form-control');
+    $('.dataTables_length select').css("display","inline");
+    $('.dataTables_length select').css("width","auto");
+}

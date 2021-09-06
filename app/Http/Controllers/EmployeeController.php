@@ -15,6 +15,66 @@ class EmployeeController extends Controller
         return view('employee.index', compact('title','employees'));
     }
 
+    public function ajax(Request $request)
+    {
+        $columns = array('id', 'name', 'punchin_date', 'punchin_time', 'punchout_date', 'punchout_time', 'action');
+
+        $employees = new Employee;
+        $totalData = $employees->count();
+        $totalFiltered = $employees->count();
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+
+        $dir = "desc";
+        $order = "created_at";
+        if(isset($columns[$request->input('order.0.column')]))
+        {
+            $order = $columns[$request->input('order.0.column')];
+            $dir = $request->input('order.0.dir');
+        }
+
+        if($request->input('search.value') != "")
+        {
+            $search = $request->input('search.value');
+            $employees = $employees->where('name','LIKE',"%{$search}%");
+            $totalFiltered = $employees->count();
+
+        }
+        $employees = $employees->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+
+        $data = array();
+        if($employees->count() > 0)
+        {
+            foreach ($employees as $employee)
+            {
+                $nestedData['id'] = $employee->id;
+                $nestedData['name'] = $employee->name;
+
+                $nestedData['punchin_date'] = $employee->punchinTime ? $employee->punchinTime->created_at->format('Y-m-d') : "";
+                $nestedData['punchin_time'] = $employee->punchinTime ? $employee->punchinTime->created_at->format('H:i:s') : "";
+
+                $nestedData['punchout_date'] = $employee->punchoutTime ? $employee->punchinTime->created_at->format('Y-m-d') : "";
+                $nestedData['punchout_time'] = $employee->punchoutTime ? $employee->punchinTime->created_at->format('H:i:s') : "";
+
+                $action = '<div class="tb-icon-wrap">';
+                $action .= '<a href="'.route('employee.view',$employee->id).'" class="btn btn-info btn-xs action-btn" role="button" aria-pressed="true"><i class="fa fa-eye"></i></a>';
+                $nestedData['action'] = $action;
+
+                $data[] = $nestedData;
+            }
+        }
+
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data
+        );
+
+        echo json_encode($json_data);
+    }
+
     public function store(Request $request)
     {
         $validator = \Validator::make($request->all(), [

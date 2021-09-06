@@ -31,9 +31,8 @@
                                 </div>
                             </div>
                         </form>
-                        <!-- <table class="table text-center" id="data-table">
+                        <table class="table text-center" id="data-table">
                             <thead>
-                                <th>Id</th>
                                 <th>Employee ID</th>
                                 <th>Employee Name</th>
                                 <th>Punch In Date</th>
@@ -42,7 +41,7 @@
                                 <th>Punch Out Time</th>
                                 <th>Actions</th>
                             </thead>
-                        </table> -->
+                        </table>
                     </div>
                 </div>
             </div>

@@ -13,8 +13,18 @@ class Employee extends Model
         'name',
     ];
 
-    public function punchins()
+    public function histories()
     {
         return $this->hasMany(EmployeePunchIn::class);
+    }
+
+    public function punchinTime()
+    {
+        return $this->hasOne(EmployeePunchIn::class)->orderBy('id','asc');
+    }
+
+    public function punchoutTime()
+    {
+        return $this->hasOne(EmployeePunchIn::class)->orderBy('id','desc');
     }
 }

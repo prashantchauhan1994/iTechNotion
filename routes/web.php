@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::namespace('App\Http\Controllers')->group(function(){
     Route::get('/employee', 'EmployeeController@index')->name('employee.index');
-    // Route::get('/employee/ajax', 'EmployeeController@ajax')->name('employee.ajax');
+    Route::get('/employee/ajax', 'EmployeeController@ajax')->name('employee.ajax');
     Route::post('/employee/store', 'EmployeeController@store')->name('employee.store');
     Route::get('/employee/view/{id}', 'EmployeeController@view')->name('employee.view');
 });
